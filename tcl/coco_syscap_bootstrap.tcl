@@ -42,7 +42,7 @@ proc ::coco_syscap_bridge::_source_utf8 {path} {
 proc ::coco_syscap_bridge::_load_impl {} {
     variable script_dir
     set dir $script_dir
-    foreach f {utils.tcl highlight.tcl property.tcl} {
+    foreach f {utils.tcl highlight.tcl property.tcl project.tcl} {
         set fp [file join $dir $f]
         if {[file exists $fp]} {
             catch {::coco_syscap_bridge::_source_utf8 $fp}
@@ -61,6 +61,13 @@ proc ::coco_syscap_bridge::_dispatch {cmd arg} {
                     [::coco_syscap_utils::json_field_string command "ping"] \
                     [::coco_syscap_utils::json_field_string message "pong"] \
                     [::coco_syscap_utils::json_field_number pid [pid]]]]]
+        }
+        project_info {
+            if {[llength [info commands ::coco_syscap_project_info_impl]] == 0} {
+                error [::coco_syscap_utils::json_error "missing_impl" \
+                    "project_info not implemented"]
+            }
+            return [::coco_syscap_project_info_impl]
         }
         highlight_part {
             set part [string trim $arg]
