@@ -198,6 +198,24 @@ proc _coco_syscap_zoom_union_bbox {union_bbox {padding 100}} {
 proc _coco_syscap_find_route_hitpoint {page page_sp route_item} {
     set candidates {}
 
+    # Midpoints of the real wire segments come first. Points taken from the
+    # bounding box can all miss a bent (L-shaped) wire.
+    # dbGetSegments returns {{x1 y1} {x2 y2} type}; type 28 is a wire segment.
+    set segments {}
+    catch {set segments [::sch::dbGetSegments $route_item]}
+    foreach seg $segments {
+        if {[lindex $seg 2] != 28} continue
+        set p1 [lindex $seg 0]
+        set p2 [lindex $seg 1]
+        if {[lindex $p1 0] == [lindex $p2 0] && [lindex $p1 1] == [lindex $p2 1]} continue
+        set pt [list \
+            [_coco_syscap_db_to_sch [expr {([lindex $p1 0] + [lindex $p2 0]) / 2}]] \
+            [_coco_syscap_db_to_sch [expr {([lindex $p1 1] + [lindex $p2 1]) / 2}]]]
+        if {[lsearch -exact $candidates $pt] < 0} {
+            lappend candidates $pt
+        }
+    }
+
     set pos_raw ""
     catch {set pos_raw [::sch::dbGetPos $route_item]}
     if {$pos_raw ne "" && !([lindex $pos_raw 0] == 0 && [lindex $pos_raw 1] == 0)} {
