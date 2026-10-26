@@ -277,7 +277,7 @@ proc _coco_syscap_zoom_to_bbox {x1 y1 x2 y2 {padding 100}} {
 }
 
 # highlight_part: find component by refdes, select with -type INST, zoom to it
-proc ::coco_syscap_highlight_part_impl {refdes} {
+proc _coco_syscap_highlight_part_on_active_page {refdes} {
     set page    [::sch::dbGetActivePage]
     set page_sp [::sch::dbxGetActivePageSpath]
     set items   [::sch::dbGetPageItems $page]
@@ -346,6 +346,7 @@ proc ::coco_syscap_highlight_part_impl {refdes} {
         return [::coco_syscap_utils::json_success \
             [::coco_syscap_utils::json_object_from_pairs [list \
                 [::coco_syscap_utils::json_field_string refdes $refdes] \
+                [::coco_syscap_utils::json_field_string page $page_sp] \
                 [::coco_syscap_utils::json_field_number x $x] \
                 [::coco_syscap_utils::json_field_number y $y]]]]
     }
@@ -362,7 +363,7 @@ proc ::coco_syscap_highlight_part_impl {refdes} {
 #   2. Power(21) - power nets like AGND, GND, VCC
 #   3. Route(26) - signal net wire (VIN_FUNC, etc.)
 #      Route dbGetPos may be 0 0, so probe multiple hit-points from bbox/children
-proc ::coco_syscap_highlight_net_impl {net_name} {
+proc _coco_syscap_highlight_net_on_active_page {net_name} {
     set page    [::sch::dbGetActivePage]
     set page_sp [::sch::dbxGetActivePageSpath]
     set items   [::sch::dbGetPageItems $page]
@@ -398,6 +399,7 @@ proc ::coco_syscap_highlight_net_impl {net_name} {
         return [::coco_syscap_utils::json_success \
             [::coco_syscap_utils::json_object_from_pairs [list \
                 [::coco_syscap_utils::json_field_string net $net_name] \
+                [::coco_syscap_utils::json_field_string page $page_sp] \
                 [::coco_syscap_utils::json_field_string selected_type "SIMPLE_NOTE"] \
                 [::coco_syscap_utils::json_field_number x $x] \
                 [::coco_syscap_utils::json_field_number y $y]]]]
@@ -431,6 +433,7 @@ proc ::coco_syscap_highlight_net_impl {net_name} {
         return [::coco_syscap_utils::json_success \
             [::coco_syscap_utils::json_object_from_pairs [list \
                 [::coco_syscap_utils::json_field_string net $net_name] \
+                [::coco_syscap_utils::json_field_string page $page_sp] \
                 [::coco_syscap_utils::json_field_string selected_type "ROUTE"] \
                 [::coco_syscap_utils::json_field_number x $x] \
                 [::coco_syscap_utils::json_field_number y $y]]]]
@@ -463,6 +466,7 @@ proc ::coco_syscap_highlight_net_impl {net_name} {
         return [::coco_syscap_utils::json_success \
             [::coco_syscap_utils::json_object_from_pairs [list \
                 [::coco_syscap_utils::json_field_string net $net_name] \
+                [::coco_syscap_utils::json_field_string page $page_sp] \
                 [::coco_syscap_utils::json_field_string selected_type "ROUTE"] \
                 [::coco_syscap_utils::json_field_number x $x] \
                 [::coco_syscap_utils::json_field_number y $y]]]]
@@ -473,6 +477,138 @@ proc ::coco_syscap_highlight_net_impl {net_name} {
         "Net '$net_name' not found on active page" \
         [::coco_syscap_utils::json_object_from_pairs [list \
             [::coco_syscap_utils::json_field_string net $net_name]]]]
+}
+
+# Page lookup for highlight_part / highlight_net
+#
+# Highlighting only works on the active page, so when the target is not there
+# the page that holds it is found and opened first. dbGetPageItems also reads
+# pages that are not open, so only the target page is opened.
+
+# Pages of the design shown on the active page, as {spath page_db} pairs.
+proc _coco_syscap_design_pages {} {
+    set active_sp ""
+    catch {set active_sp [::sch::dbxGetActivePageSpath]}
+    # @worklib.design(tbl_1):page1(2)
+    if {![regexp {^(@([^.]+)\.([^(]+)\([^)]*\)):} $active_sp -> prefix lib cell]} {
+        return {}
+    }
+    set names {}
+    catch {set names [::sch::dbGetPageNames $lib $cell]}
+    set pages {}
+    foreach name $names {
+        set db ""
+        catch {set db [::sch::dbGetPage $lib $cell $name]}
+        if {$db eq "" || $db eq "db:ffffffff"} continue
+        lappend pages [list "$prefix:$name" $db]
+    }
+    return $pages
+}
+
+proc _coco_syscap_page_has_part {page refdes} {
+    foreach item [::sch::dbGetPageItems $page] {
+        set t ""
+        catch {set t [::sch::dbGetType $item]}
+        if {$t != 16} continue
+        set sp ""
+        catch {set sp [::sch::dbGetSPath $item]}
+        set info ""
+        catch {set info [::sch::dbxGetRefDesAndOriginFromInstSpath $sp]}
+        foreach pair $info {
+            if {[lindex $pair 0] eq "refdes" && [string equal -nocase [lindex $pair 1] $refdes]} {
+                return 1
+            }
+        }
+    }
+    return 0
+}
+
+proc _coco_syscap_page_has_net {page net_name} {
+    foreach item [::sch::dbGetPageItems $page] {
+        set t ""
+        catch {set t [::sch::dbGetType $item]}
+        set name ""
+        catch {set name [::sch::dbGetItemName $item]}
+        if {$t == 21 || $t == 26} {
+            if {[string equal -nocase $name $net_name]} {
+                return 1
+            }
+            continue
+        }
+        set type_name ""
+        catch {set type_name [::sch::dbType2Name $t]}
+        if {[string equal -nocase $type_name "SimpleNote"] || [string equal -nocase $type_name "SIMPLE_NOTE"]} {
+            set text ""
+            catch {set text [::sch::dbGetItemText $item]}
+            if {[string equal -nocase $name $net_name] || [string equal -nocase $text $net_name]} {
+                return 1
+            }
+        }
+    }
+    return 0
+}
+
+# kind is "part" or "net". Returns {highlight result JSON} or raises the
+# JSON error of the last attempt.
+proc _coco_syscap_highlight_on_any_page {kind name} {
+    if {$kind eq "part"} {
+        set on_active _coco_syscap_highlight_part_on_active_page
+        set on_page _coco_syscap_page_has_part
+        set label "Part"
+        set field refdes
+    } else {
+        set on_active _coco_syscap_highlight_net_on_active_page
+        set on_page _coco_syscap_page_has_net
+        set label "Net"
+        set field net
+    }
+
+    if {![catch {$on_active $name} result]} {
+        return $result
+    }
+    if {![string match {*"code":"not_found"*} $result]} {
+        error $result
+    }
+
+    set active_sp ""
+    catch {set active_sp [::sch::dbxGetActivePageSpath]}
+    set target ""
+    foreach page [_coco_syscap_design_pages] {
+        lassign $page page_sp page_db
+        if {$page_sp eq $active_sp} continue
+        if {[$on_page $page_db $name]} {
+            set target $page_sp
+            break
+        }
+    }
+    if {$target eq ""} {
+        error [::coco_syscap_utils::json_error "not_found" \
+            "$label '$name' not found in design" \
+            [::coco_syscap_utils::json_object_from_pairs [list \
+                [::coco_syscap_utils::json_field_string $field $name]]]]
+    }
+
+    catch {openItem $target SCH PAGE 1}
+    catch {update idletasks}
+    set now_sp ""
+    catch {set now_sp [::sch::dbxGetActivePageSpath]}
+    if {$now_sp ne $target} {
+        error [::coco_syscap_utils::json_error "page_switch_failed" \
+            "Could not open page '$target' holding $label '$name'" \
+            [::coco_syscap_utils::json_object_from_pairs [list \
+                [::coco_syscap_utils::json_field_string $field $name] \
+                [::coco_syscap_utils::json_field_string page $target] \
+                [::coco_syscap_utils::json_field_string active_page $now_sp]]]]
+    }
+    return [$on_active $name]
+}
+
+proc ::coco_syscap_highlight_part_impl {refdes} {
+    return [_coco_syscap_highlight_on_any_page part $refdes]
+}
+
+proc ::coco_syscap_highlight_net_impl {net_name} {
+    return [_coco_syscap_highlight_on_any_page net $net_name]
 }
 
 # clear_highlight: deselect current selection
@@ -512,3 +648,4 @@ proc ::coco_syscap_clear_highlight_impl {} {
         [::coco_syscap_utils::json_object_from_pairs [list \
             [::coco_syscap_utils::json_field_string remaining_selection $sel]]]]
 }
+

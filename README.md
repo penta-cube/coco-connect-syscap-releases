@@ -86,11 +86,16 @@ The line protocol response uses:
 Success example:
 
 ```json
-{"ok":true,"data":{"net":"AGND","selected_type":"SIMPLE_NOTE","x":16500,"y":5100}}
+{"ok":true,"data":{"net":"AGND","page":"@worklib.demo(tbl_1):page1(2)","selected_type":"SIMPLE_NOTE","x":16500,"y":5100}}
 ```
 
 Error example:
 
 ```json
-{"ok":false,"error":{"code":"not_found","message":"Part 'U1' not found on active page","details":{"refdes":"U1"}}}
+{"ok":false,"error":{"code":"not_found","message":"Part 'U1' not found in design","details":{"refdes":"U1"}}}
 ```
+
+`highlight_part` and `highlight_net` look on the active page first. When the target
+is not there, the page that holds it is opened and the target is highlighted on that
+page. `page` in the result is the page shown after the call. `page_switch_failed` is
+returned when that page could not be opened.
