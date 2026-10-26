@@ -13,10 +13,12 @@ Release assets and runtime scripts for `coco-connect-syscap`.
   - `tcl/utils.tcl`
   - `tcl/highlight.tcl`
   - `tcl/property.tcl`
+  - `tcl/project.tcl`
 
 ## Bridge Commands
 
 - `ping`
+- `project_info`
 - `highlight_net <NET_NAME>`
 - `highlight_part <REFDES>`
 - `clear_highlight`
@@ -49,6 +51,7 @@ Bridge command argument examples:
 
 ```text
 ping
+project_info
 highlight_net AGND
 highlight_part U1
 clear_highlight
@@ -58,6 +61,19 @@ part_property_set U1|COCO_TEST_PROP|hello
 part_property_delete U1|COCO_TEST_PROP
 part_property_display_mode U1|COCO_TEST_PROP|value_only
 ```
+
+## Project Info
+
+`project_info` reports the project open in System Capture so a caller can read the
+same design from disk and check that it matches the live session:
+
+```json
+{"ok":true,"data":{"project_open":true,"project_dir":"C:/work/demo","cpm_path":"C:/work/demo/demo.cpm","sdax_path":"C:/work/demo/logic/demo.sdax","design_name":"demo","design_library":"worklib","modified":false,"app_version":"25.1","unavailable":[]}}
+```
+
+Each value is read on its own. A value the running System Capture release does not
+provide is `null` and its key is listed in `unavailable`. `modified` is `true` when
+the root design has changes that are not saved to disk yet.
 
 ## Response Format
 
@@ -70,11 +86,16 @@ The line protocol response uses:
 Success example:
 
 ```json
-{"ok":true,"data":{"net":"AGND","selected_type":"SIMPLE_NOTE","x":16500,"y":5100}}
+{"ok":true,"data":{"net":"AGND","page":"@worklib.demo(tbl_1):page1(2)","selected_type":"SIMPLE_NOTE","x":16500,"y":5100}}
 ```
 
 Error example:
 
 ```json
-{"ok":false,"error":{"code":"not_found","message":"Part 'U1' not found on active page","details":{"refdes":"U1"}}}
+{"ok":false,"error":{"code":"not_found","message":"Part 'U1' not found in design","details":{"refdes":"U1"}}}
 ```
+
+`highlight_part` and `highlight_net` look on the active page first. When the target
+is not there, the page that holds it is opened and the target is highlighted on that
+page. `page` in the result is the page shown after the call. `page_switch_failed` is
+returned when that page could not be opened.
