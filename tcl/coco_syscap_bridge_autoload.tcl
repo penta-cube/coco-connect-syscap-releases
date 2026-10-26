@@ -15,21 +15,21 @@ set _coco_syscap_bridge_candidates {}
 set _coco_syscap_bridge_host "127.0.0.1"
 set _coco_syscap_bridge_port 49501
 
-if {[info exists env(COCO_SYSCAP_BRIDGE_DIR)] && $env(COCO_SYSCAP_BRIDGE_DIR) ne ""} {
-  lappend _coco_syscap_bridge_candidates $env(COCO_SYSCAP_BRIDGE_DIR)
+# System Capture sources autoload files from inside a proc, so environment
+# variables must be read through the global ::env array.
+if {[info exists ::env(COCO_SYSCAP_BRIDGE_DIR)] && $::env(COCO_SYSCAP_BRIDGE_DIR) ne ""} {
+  lappend _coco_syscap_bridge_candidates $::env(COCO_SYSCAP_BRIDGE_DIR)
 }
 
-lappend _coco_syscap_bridge_candidates {C:/Repository/coco-workspace/coco-connect-syscap/tcl}
-lappend _coco_syscap_bridge_candidates {C:/Repository/cubic-ai-chat/apps/desktop-electron/resources/coco-connect-syscap/tcl}
 lappend _coco_syscap_bridge_candidates {C:/Program Files/CubicAI/coco-connect-syscap/tcl}
 lappend _coco_syscap_bridge_candidates {C:/Program Files/CubicAI/resources/coco-connect-syscap/tcl}
 
-if {[info exists env(COCO_SYSCAP_BRIDGE_HOST)] && $env(COCO_SYSCAP_BRIDGE_HOST) ne ""} {
-  set _coco_syscap_bridge_host $env(COCO_SYSCAP_BRIDGE_HOST)
+if {[info exists ::env(COCO_SYSCAP_BRIDGE_HOST)] && $::env(COCO_SYSCAP_BRIDGE_HOST) ne ""} {
+  set _coco_syscap_bridge_host $::env(COCO_SYSCAP_BRIDGE_HOST)
 }
 
-if {[info exists env(COCO_SYSCAP_BRIDGE_PORT)] && $env(COCO_SYSCAP_BRIDGE_PORT) ne ""} {
-  set _coco_syscap_bridge_port $env(COCO_SYSCAP_BRIDGE_PORT)
+if {[info exists ::env(COCO_SYSCAP_BRIDGE_PORT)] && $::env(COCO_SYSCAP_BRIDGE_PORT) ne ""} {
+  set _coco_syscap_bridge_port $::env(COCO_SYSCAP_BRIDGE_PORT)
 }
 
 set _coco_syscap_bridge_loaded 0
