@@ -42,7 +42,7 @@ proc ::coco_syscap_bridge::_source_utf8 {path} {
 proc ::coco_syscap_bridge::_load_impl {} {
     variable script_dir
     set dir $script_dir
-    foreach f {utils.tcl highlight.tcl property.tcl project.tcl} {
+    foreach f {utils.tcl highlight.tcl property.tcl} {
         set fp [file join $dir $f]
         if {[file exists $fp]} {
             catch {::coco_syscap_bridge::_source_utf8 $fp}
@@ -61,13 +61,6 @@ proc ::coco_syscap_bridge::_dispatch {cmd arg} {
                     [::coco_syscap_utils::json_field_string command "ping"] \
                     [::coco_syscap_utils::json_field_string message "pong"] \
                     [::coco_syscap_utils::json_field_number pid [pid]]]]]
-        }
-        project_info {
-            if {[llength [info commands ::coco_syscap_project_info_impl]] == 0} {
-                error [::coco_syscap_utils::json_error "missing_impl" \
-                    "project_info not implemented"]
-            }
-            return [::coco_syscap_project_info_impl]
         }
         highlight_part {
             set part [string trim $arg]
@@ -253,7 +246,7 @@ proc ::coco_syscap_bridge::start {{new_host "127.0.0.1"} {new_port 49501} {new_t
 }
 
 # ---------------------------------------------------------------------------
-# run -- vwait-based event loop. Blocks the Tcl console until stop is called.
+# run — vwait-based event loop. Blocks the Tcl console until stop is called.
 #        Uses a global tick variable so vwait works correctly in all embedded
 #        Tcl environments (namespace variables are not reliable with vwait).
 # ---------------------------------------------------------------------------
@@ -279,7 +272,7 @@ proc ::coco_syscap_bridge::run {} {
 }
 
 # ---------------------------------------------------------------------------
-# stop -- exit the vwait loop and close the server socket.
+# stop — exit the vwait loop and close the server socket.
 # ---------------------------------------------------------------------------
 proc ::coco_syscap_bridge::stop {} {
     variable running

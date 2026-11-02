@@ -237,3 +237,4 @@ proc ::coco_syscap_part_property_display_mode_impl {refdes property_name display
             [::coco_syscap_utils::json_field_string property $property_name] \
             [::coco_syscap_utils::json_field_string display_mode $display_mode]]]]
 }
+

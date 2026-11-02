@@ -78,7 +78,7 @@ proc ::coco_syscap_utils::json_error {code message {details_json ""}} {
 
 proc ::coco_syscap_utils::looks_like_json {text} {
     set trimmed [string trim $text]
-    expr {[string length $trimmed] >= 2 && [string index $trimmed 0] eq "\{" && [string index $trimmed end] eq "\}"} 
+    expr {[string length $trimmed] >= 2 && [string index $trimmed 0] eq "\{" && [string index $trimmed end] eq "\}"}
 }
 
 proc ::coco_syscap_utils::ensure_error_json {message {code "bridge_error"}} {
@@ -87,3 +87,4 @@ proc ::coco_syscap_utils::ensure_error_json {message {code "bridge_error"}} {
     }
     return [json_error $code $message]
 }
+
