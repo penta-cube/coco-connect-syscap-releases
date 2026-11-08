@@ -1,9 +1,9 @@
 {
-  "version": "v0.1.1",
+  "version": "v0.1.2",
   "source_repository": "penta-cube/coco-connect-syscap",
-  "source_sha": "993e04f905ff7d08e76467ae4efff17f7541cd85",
+  "source_sha": "87cc0ef1cfcfe48502a3e0f10d50a4b4d5653627",
   "schematic_model_sha": null,
-  "runtime_repository_sha": "59f4a83d716f13b2cb28a89c2aec2b271d18fad9",
+  "runtime_repository_sha": "9fb4b86e85853b40e76fa5afbd158c1049caf128",
   "platforms": [
     "windows-x64"
   ],
@@ -11,28 +11,28 @@
   "assets": [
     {
       "name": "coco-connect-syscap-windows-x64.zip",
-      "bytes": 1301204,
-      "sha256": "a1d7ac72e791eeb6f0a78857bbfc6237463d0169986afd9d2ef29d6ddbd7b4bd"
+      "bytes": 1310258,
+      "sha256": "162883e6914320f29c7b0f09d77183b94c5d865ec14396e85c2c7cdafa3468e8"
     },
     {
       "name": "coco-connect-syscap.exe",
-      "bytes": 3412480,
-      "sha256": "30e840fe8de8f3b5caf5e866b10f136ae212ba5cd1dc87626d2769b658f0ae65"
+      "bytes": 3444736,
+      "sha256": "54b793aea0f3f8134da69eb4b90db6b12b9b96a6a7c2216a00963e4b898af67f"
     },
     {
       "name": "coco_syscap_bootstrap.tcl",
-      "bytes": 11370,
-      "sha256": "107b0e7907d8bcb0ad9a682fe89f22a5824c94103243d83c0f43882a85123fb2"
+      "bytes": 11695,
+      "sha256": "ffd18b742b946437cf81233b6ee11c97199d6f49f59ea84a1db1dc2c2ba00899"
     },
     {
       "name": "coco_syscap_bridge_autoload.tcl",
-      "bytes": 3928,
-      "sha256": "6dcdd4eb370195f9a82bc54bda40b2378eb31e8c1995a26c848aceba635ef139"
+      "bytes": 3859,
+      "sha256": "e03ad41be0d071ed6b32c9579dd11f3bb92e5a1b6b421f119e960034a9d14f00"
     },
     {
       "name": "highlight.tcl",
-      "bytes": 17712,
-      "sha256": "e0fc5bb61a55c097bb097cae3c0ddebf5b9c6faf668b28ec07f49495322af7f0"
+      "bytes": 23487,
+      "sha256": "fc728b329e2a6454bfd925f4a42fb699666b47f96cdb66abfd9529813085f2e2"
     },
     {
       "name": "project.tcl",
