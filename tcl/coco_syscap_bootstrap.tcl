@@ -42,7 +42,7 @@ proc ::coco_syscap_bridge::_source_utf8 {path} {
 proc ::coco_syscap_bridge::_load_impl {} {
     variable script_dir
     set dir $script_dir
-    foreach f {utils.tcl highlight.tcl property.tcl project.tcl} {
+    foreach f {utils.tcl highlight.tcl property.tcl project.tcl library_native.tcl standard_circuit.tcl standard_circuit_generation.tcl document_appearance.tcl electrical.tcl registered_generation.tcl timing.tcl} {
         set fp [file join $dir $f]
         if {[file exists $fp]} {
             catch {::coco_syscap_bridge::_source_utf8 $fp}
@@ -61,6 +61,27 @@ proc ::coco_syscap_bridge::_dispatch {cmd arg} {
                     [::coco_syscap_utils::json_field_string command "ping"] \
                     [::coco_syscap_utils::json_field_string message "pong"] \
                     [::coco_syscap_utils::json_field_number pid [pid]]]]]
+        }
+        standard_circuit_prepare - standard_circuit_create - standard_circuit_inspect - standard_circuit_cancel {
+            if {[llength [info commands ::coco_syscap_generation::execute]] == 0} {
+                error [::coco_syscap_utils::json_error "missing_impl" "Standard circuit runtime unavailable"]
+            }
+            return [::coco_syscap_generation::execute [string range $cmd 17 end] $arg]
+        }
+        standard_circuit_targets {
+            return [::coco_syscap_registered::targets $arg]
+        }
+        standard_circuit_profiles {
+            return [::coco_syscap_circuit::profiles $arg]
+        }
+        standard_circuit_symbol_probe {
+            return [::coco_syscap_electrical::probe $arg]
+        }
+        standard_circuit_probe {
+            if {[llength [info commands ::coco_syscap_circuit::probe]] == 0} {
+                error [::coco_syscap_utils::json_error "missing_impl" "standard_circuit_probe not implemented"]
+            }
+            return [::coco_syscap_circuit::probe $arg]
         }
         project_info {
             if {[llength [info commands ::coco_syscap_project_info_impl]] == 0} {

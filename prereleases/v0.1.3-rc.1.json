@@ -1,0 +1,103 @@
+{
+  "version": "v0.1.3-rc.1",
+  "source_repository": "penta-cube/coco-connect-syscap",
+  "source_sha": "b757054dd4e4dd59b0a304eb63257f8ac3e8c55c",
+  "schematic_model_sha": "89fc81dbf559d798d18894f2cf5ef98bfda961f9",
+  "platforms": [
+    "windows-x64"
+  ],
+  "validation": {
+    "cargo_test_locked": [
+      [
+        "65",
+        "0",
+        "0"
+      ]
+    ],
+    "release_build": true,
+    "cli_help": true,
+    "actual_ai_chat": "pending"
+  },
+  "assets": [
+    {
+      "name": "coco-connect-syscap-windows-x64.zip",
+      "bytes": 1843231,
+      "sha256": "f06a18132960bdeef972ebce965f54d6b33acb379f1a14878e75988683dce137"
+    },
+    {
+      "name": "coco-connect-syscap.exe",
+      "bytes": 4995584,
+      "sha256": "5011dc50593dafc66c52ef50a6058dc2e0cbb5ada81e0bdd956a14e2c9be8af9"
+    },
+    {
+      "name": "coco_syscap_bootstrap.tcl",
+      "bytes": 12903,
+      "sha256": "f1549077dbcaff8fc037e029f360a9546f2eb59643c63eb9036f33d8d5ae549b"
+    },
+    {
+      "name": "coco_syscap_bridge_autoload.tcl",
+      "bytes": 3859,
+      "sha256": "e03ad41be0d071ed6b32c9579dd11f3bb92e5a1b6b421f119e960034a9d14f00"
+    },
+    {
+      "name": "document_appearance.tcl",
+      "bytes": 10358,
+      "sha256": "3dc3f7889c202f68a1d6fa17b61a7e501c8a605c52223cc2869d70489419b8a1"
+    },
+    {
+      "name": "electrical.tcl",
+      "bytes": 12811,
+      "sha256": "78db80eb0db4a0a0ecc8d4bb9c1033b0d4d7606937fef7ca5717c99cb12c2d84"
+    },
+    {
+      "name": "highlight.tcl",
+      "bytes": 23487,
+      "sha256": "fc728b329e2a6454bfd925f4a42fb699666b47f96cdb66abfd9529813085f2e2"
+    },
+    {
+      "name": "library_native.tcl",
+      "bytes": 13793,
+      "sha256": "f01580071313e21be96b970fe4ee106f6f8d9b688ef8486e9a83ed89f6b80fc3"
+    },
+    {
+      "name": "project.tcl",
+      "bytes": 6030,
+      "sha256": "c8383e32ef369afa0eefa85bc630cb506ce66872a4c46b2cf267aa0019bf6b66"
+    },
+    {
+      "name": "property.tcl",
+      "bytes": 9693,
+      "sha256": "f6f776808ed94d7ec010c9a3feefc0bc5d651498279947a6968ab9aa64f63c4c"
+    },
+    {
+      "name": "registered_generation.tcl",
+      "bytes": 8575,
+      "sha256": "9a39ba7cdafb95e29ef2ce52b7ca81f3d082b1d2f7583474b67c5f8aee0dccdf"
+    },
+    {
+      "name": "standard_circuit.tcl",
+      "bytes": 8579,
+      "sha256": "8fb9436773c286b5e19707ea88b8b24164c1b0c96b9f26b666600644de3dd507"
+    },
+    {
+      "name": "standard_circuit_generation.tcl",
+      "bytes": 31443,
+      "sha256": "ccb30ecb091019410c25a7c5d932b98fe0aa0f0a2e7a034165258488c35e3027"
+    },
+    {
+      "name": "syscap_bootstrap.tcl",
+      "bytes": 524,
+      "sha256": "519bf983e7b5c7c724edb55c2f9936aa00cd34cfdb5c765a39afd8004fc79f98"
+    },
+    {
+      "name": "timing.tcl",
+      "bytes": 2985,
+      "sha256": "15f70ec98e66f596fab1f11b7e518787cb3f38901e5a113058a6e85826b535b2"
+    },
+    {
+      "name": "utils.tcl",
+      "bytes": 2550,
+      "sha256": "9d185c0ab146a638b60276ee50689bdd012ac398c6b967a6bf8781bb8288c6b5"
+    }
+  ]
+}
