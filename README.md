@@ -10,10 +10,11 @@ Release assets and runtime scripts for `coco-connect-syscap`.
   - `tcl/coco_syscap_bootstrap.tcl`
   - `tcl/syscap_bootstrap.tcl`
   - `tcl/coco_syscap_bridge_autoload.tcl`
-  - `tcl/utils.tcl`
-  - `tcl/highlight.tcl`
-  - `tcl/property.tcl`
-  - `tcl/project.tcl`
+  - `tcl/bridge.tbc` and compiled Tcl modules
+  - `tcl/tbcload.dll` (Windows x64) and `tcl/tbcload-LICENSE.txt`
+
+Keep the loader and the compiled modules together. System Capture loads them
+through the bootstrap script using its embedded Tcl interpreter.
 
 ## Bridge Commands
 
