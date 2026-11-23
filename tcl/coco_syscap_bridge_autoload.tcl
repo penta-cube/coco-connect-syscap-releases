@@ -32,17 +32,19 @@ if {[info exists ::env(COCO_SYSCAP_BRIDGE_PORT)] && $::env(COCO_SYSCAP_BRIDGE_PO
   set _coco_syscap_bridge_port $::env(COCO_SYSCAP_BRIDGE_PORT)
 }
 
-set _coco_syscap_bridge_loaded 0
+set _coco_syscap_bootstrap_found 0
 foreach _coco_syscap_bridge_dir $_coco_syscap_bridge_candidates {
   set _coco_syscap_bootstrap [file join $_coco_syscap_bridge_dir coco_syscap_bootstrap.tcl]
   if {![file exists $_coco_syscap_bootstrap]} {
     set _coco_syscap_bootstrap [file join $_coco_syscap_bridge_dir syscap_bootstrap.tcl]
   }
   if {[file exists $_coco_syscap_bootstrap]} {
+    set _coco_syscap_bootstrap_found 1
     # Suppress auto-start inside bootstrap (run would block startup).
     set ::env(COCO_SYSCAP_BRIDGE_DISABLE_AUTO_START) 1
     if {[catch {source $_coco_syscap_bootstrap} _coco_syscap_err]} {
       puts "CubicAI System Capture Bridge autoload failed: $_coco_syscap_err"
+      break
     } else {
       # Retry proc: if start fails, retries every 3 s inside the vwait loop.
       proc ::coco_syscap_bridge::_retry_start {} {
@@ -70,7 +72,6 @@ foreach _coco_syscap_bridge_dir $_coco_syscap_bridge_candidates {
         }
       }
 
-      set _coco_syscap_bridge_loaded 1
       break
     }
   }
@@ -78,11 +79,11 @@ foreach _coco_syscap_bridge_dir $_coco_syscap_bridge_candidates {
 
 unset -nocomplain ::env(COCO_SYSCAP_BRIDGE_DISABLE_AUTO_START)
 
-if {!$_coco_syscap_bridge_loaded} {
+if {!$_coco_syscap_bootstrap_found} {
   puts "CubicAI System Capture Bridge autoload skipped: coco_syscap_bootstrap.tcl not found"
 }
 
-unset _coco_syscap_bridge_loaded
+unset _coco_syscap_bootstrap_found
 unset _coco_syscap_bridge_host
 unset _coco_syscap_bridge_port
 catch {unset _coco_syscap_bootstrap}
