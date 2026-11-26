@@ -1,0 +1,116 @@
+{
+  "version": "v0.1.5",
+  "source_repository": "penta-cube/coco-connect-syscap",
+  "source_sha": "13eed20ad70335cbbab5c2ee6d5ac6c857f0e52b",
+  "schematic_model_sha": "89fc81dbf559d798d18894f2cf5ef98bfda961f9",
+  "source_ref": "main",
+  "platforms": [
+    "windows-x64"
+  ],
+  "validation": "cargo test --locked; cargo build --release --locked; CLI --help; Cadence 25.1 Tcl 8.6에서 보호 런타임 로드 및 ping, Python·Tcl/MCP 테스트",
+  "test_counts": [
+    [
+      "75",
+      "0",
+      "0"
+    ]
+  ],
+  "assets": [
+    {
+      "name": "bridge.tbc",
+      "bytes": 14251,
+      "sha256": "9bd0c8ce692a1bdcef1e216f878bfe70d930e02c0c90aab693b6d73406d15d70"
+    },
+    {
+      "name": "coco-connect-syscap-windows-x64.zip",
+      "bytes": 2206721,
+      "sha256": "a5c1c89d619c1ba48e21b4f4c104fbaddce879d1dc463725c59157ea8e64460c"
+    },
+    {
+      "name": "coco-connect-syscap.exe",
+      "bytes": 5599744,
+      "sha256": "fd8a57c66cdbe97ffb0ae6af56a59e47e56cf9e0048bb5613a086d514b63b17a"
+    },
+    {
+      "name": "coco_syscap_bootstrap.tcl",
+      "bytes": 515,
+      "sha256": "a77dab552c216c26397918c3c0c2641c075102151f51fbf3b3cdd885898c48aa"
+    },
+    {
+      "name": "coco_syscap_bridge_autoload.tcl",
+      "bytes": 3786,
+      "sha256": "6d9b2d3572a62aab1cf4af800add4d4d05fa78b03d6157a8ce67d7dbbc45272a"
+    },
+    {
+      "name": "document_appearance.tbc",
+      "bytes": 18291,
+      "sha256": "8a9f170a156daf44bdb23c4d772b1820f21f87a43d40c97709cf377199696d7e"
+    },
+    {
+      "name": "electrical.tbc",
+      "bytes": 24194,
+      "sha256": "14cdd1204b1e2a44dc5ca918f8471a8b2806b0daa1bacf9a6605eb1d3cc8f1a2"
+    },
+    {
+      "name": "highlight.tbc",
+      "bytes": 32428,
+      "sha256": "e92a5b991cf213b78a45760d32d1283f388fd90e9e63b306e7d9e55691f6573e"
+    },
+    {
+      "name": "library_native.tbc",
+      "bytes": 38667,
+      "sha256": "daa575def69f8642024a3d3fbbad720046b140e9d5d2f3b4b083c8d43170daad"
+    },
+    {
+      "name": "project.tbc",
+      "bytes": 6670,
+      "sha256": "084cd6cc7a024ec7320db560ebd2aac738a37449f958b46be2a2157b857b94b4"
+    },
+    {
+      "name": "property.tbc",
+      "bytes": 11775,
+      "sha256": "989fdc0f461d0865176affe842f15e1419855ce6c95e1bec46a75e64b17b698a"
+    },
+    {
+      "name": "registered_generation.tbc",
+      "bytes": 26835,
+      "sha256": "7261d84e7a5b0f95f133f6be497b1783aadc9ff59cd3fe7fbce589619714070a"
+    },
+    {
+      "name": "standard_circuit.tbc",
+      "bytes": 10966,
+      "sha256": "32e94d39960c764f0d75ba5e10e332473823e6b43af3a17630f713a4f3a34ed8"
+    },
+    {
+      "name": "standard_circuit_generation.tbc",
+      "bytes": 68844,
+      "sha256": "51011c52eb18fceb1f5a3956c259bd3cd8ab73e1464b506b96ca29a7f2fab25d"
+    },
+    {
+      "name": "syscap_bootstrap.tcl",
+      "bytes": 510,
+      "sha256": "2818723cf884963c29e872d8555a4c218830b98172dda7e04bc31a6e5ee3a529"
+    },
+    {
+      "name": "tbcload-LICENSE.txt",
+      "bytes": 1520,
+      "sha256": "552ff022170670282165505e5bff11139c7bbb207bdd51a13e3a6da2c50f8869"
+    },
+    {
+      "name": "tbcload.dll",
+      "bytes": 169984,
+      "sha256": "e73667e7a0aa3219ab375b06ac639aabfc20cd6c80de3652e53f1db56fd7f8ff"
+    },
+    {
+      "name": "timing.tbc",
+      "bytes": 5181,
+      "sha256": "576c343fa2780c5b7e6873436d73ba70ef3b9268e7a28823bc7c045d78780f70"
+    },
+    {
+      "name": "utils.tbc",
+      "bytes": 5378,
+      "sha256": "6c6aec23df6bbedd8f92f52d7ace536cf69879bd139c9abe6eea74ee474dc54e"
+    }
+  ],
+  "runtime_repository_sha": "9a24abf5d856e98e1dcf98d4ff6ef8eed61ebd7c"
+}
